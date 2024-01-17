@@ -19,7 +19,12 @@
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="Mod1.cpp" />
+    <ClCompile Include="Mark.cpp" />
     <ClCompile Include="Key.cpp" />
+    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Stage1.cpp" />
+    <ClCompile Include="Netto.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -34,6 +39,11 @@
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="Mod1.h" />
+    <ClInclude Include="Mark.h" />
     <ClInclude Include="Key.h" />
+    <ClInclude Include="Door.h" />
+    <ClInclude Include="Stage1.h" />
+    <ClInclude Include="Netto.h" />
   </ItemGroup>
 </Project>

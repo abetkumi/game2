@@ -6,91 +6,179 @@
 #include "Gamecamera.h"
 #include "Enemy.h"
 #include "GameOver.h"
-#include "Key.h"
 #include "GameClear.h"
 #include "sound/SoundEngine.h"
+#include "Mod1.h"
+#include "Mark.h"
+#include "Key.h"
+#include "Door.h"
+#include "Stage1.h"
+#include "Netto.h"
 
 bool Game::Start()
 {
+	return true;
+}
 
+Game::Game()
+{
+	Mark* mark1 = NewGO<Mark>(0, "mark");
+	mark1->m_position = { -206.2f,150.6f,493.6f };
+	mark1->firstPosition = mark1->m_position;
+	
+	m_player = NewGO<Player>(0, "player");
 
-	player = NewGO<Player>(0, "player");
-	gameCamera = NewGO<GameCamera> (0, "gamecamera");
-	backGround = NewGO<BackGround>(0, "background");
+	spriteRender.Init("Assets/sprite/Key.dds", 350.0f, 300.0f);
+
+	gameCamera = NewGO<GameCamera>(0, "gamecamera");
+
 	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/Game.wav");
 	gameBGM = NewGO<SoundSource>(0);
-	gameBGM-> Init(0);
+	gameBGM->Init(0);
 	gameBGM->Play(true);
 
-	fontRender.SetPosition({ -680.0f,-380.0f,0.0f });
-	fontRender.SetColor(g_vec4White);
-	fontRender.SetScale(2);
-	key1 = NewGO<Key>(0, "key");
-	key1->position = { -2247.0f,15.0f,-1030.0f };
-	key1->firstPosition = key1->position;
-	key2 = NewGO<Key>(0, "key");
-	key2->position = { 2932.0f,68.0f,-918.0f };
-	key2->firstPosition = key2->position;
-	key3 = NewGO<Key>(0, "key");
-	key3->position = { -2225.0f,135.0f,398.0f };
-	key3->firstPosition = key3->position;
-	key4 = NewGO<Key>(0, "key");
-	key4->position = { 1760.0f,276.0f,-611.0f };
-	key4->firstPosition = key4->position;
-	key5 = NewGO<Key>(0, "key");
-	key5->position = { 2508.0f,1280.0f,1829.0f };
-	key5->firstPosition = key5->position;
+	m_player = FindGO<Player>("player");
 
-	enemy = NewGO<Enemy>(0,"enemy");
-	enemy->position = { 2700.0f,450.0f,400.0f };
-	enemy->firstPosition = enemy->position;
+	Mod1* mod1 = NewGO<Mod1>(0, "mod1");
+	mod1->m_position = { -156.0f,29.0f,0.0f };
 
+	Key* key1 = NewGO<Key>(0, "key");
+	key1->m_position = { -7683.0f,-605.0f,1148.0f };
+	//key1->m_position = { -6073.0f,-4.6f,9560.8f };
+	Key* key2 = NewGO<Key>(0, "key");
+	key2->m_position = { -7787.0f,580.0f,-2726.0f };
+	Key* key3 = NewGO<Key>(0, "key");
+	key3->m_position = { -3430.0f,0.2f,8853.0f };
+
+	//modelRender.SetPosition(position);
+
+	m_levelRender.Init("Assets/level3D/level2.tkl", [&](LevelObjectData& objData)
+		{
+			if (objData.EqualObjectName(L"door") == true)
+			{
+				Door* door = NewGO<Door>(0, "door");
+				door->m_position = objData.position;
+				door->m_scale = objData.scale;
+				door->m_rotation = objData.rotation;
+				return true;
+			}
+
+			else if (objData.EqualObjectName(L"stage") == true) {
+				//îwåiÉIÉuÉWÉFÉNÉgÇçÏê¨Ç∑ÇÈÅB
+				backGround = NewGO<BackGround>(0, "background");
+				//ç¿ïWÇê›íËÇ∑ÇÈÅB
+				backGround->position = objData.position;
+				//ëÂÇ´Ç≥Çê›íËÇ∑ÇÈÅB
+				//backGround->m_scale = objData.scale;
+
+				return true;
+			}
+
+			else if (objData.EqualObjectName(L"stage1") == true) {
+				//îwåiÉIÉuÉWÉFÉNÉgÇçÏê¨Ç∑ÇÈÅB
+				stage1 = NewGO<Stage1>(0, "stage1");
+				//ç¿ïWÇê›íËÇ∑ÇÈÅB
+				stage1->SetPosition(objData.position);
+				//ëÂÇ´Ç≥Çê›íËÇ∑ÇÈÅB
+				//stage1->SetScale(objData.scale);
+
+				return true;
+			}
+			else if (objData.EqualObjectName(L"netto") == true) {
+				//îwåiÉIÉuÉWÉFÉNÉgÇçÏê¨Ç∑ÇÈÅB
+				Netto* netto = NewGO<Netto>(0, "netto");
+				//ç¿ïWÇê›íËÇ∑ÇÈÅB
+				netto->m_position = objData.position;
+				//ëÂÇ´Ç≥Çê›íËÇ∑ÇÈÅB
+				netto->m_scale = objData.scale;
+				netto->m_rotation = objData.rotation;
+
+				return true;
+			}
+			return true;
+		});
 
 	g_renderingEngine->SetDirectionLight(0, Vector3(0.2f, -0.7f, 0.2f), Vector3(0.2f, 0.2f, 0.2f));
 	g_renderingEngine->SetAmbient(Vector3(0.0007f, 0.0007f, 0.0007f));
-
-	return true;
 }
 
 Game::~Game()
 {
-	//BGMÔøΩtÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩsÔøΩÔøΩÔøΩÔøΩ
-	DeleteGO(player);
+
 	DeleteGO(gameCamera);
 	DeleteGO(backGround);
+	DeleteGO(mod1);
 	DeleteGO(gameBGM);
 	DeleteGO(enemy);
-	DeleteGO(key1);
-	DeleteGO(key2);
-	DeleteGO(key3);
-	DeleteGO(key4);
-	DeleteGO(key5);
+	DeleteGO(stage1);
+	DeleteGO(m_player);
+	DeleteGO(mark);
+	
+	QueryGOs<Key>("key", [&](Key* key) {
+		DeleteGO(key);
+		return true;
+	});
+
+	const auto& doors = FindGOs<Door>("door");
+	for (auto door : doors)
+	{
+		DeleteGO(door);
+	}
+	const auto& nettos = FindGOs<Netto>("netto");
+	for (auto netto : nettos)
+	{
+		DeleteGO(netto);
+	}
 }
 
 void Game::Update()
 {
-	int number;
-	char moji;
-	if (player->keyCount == 5)
+
+	if (m_player->keyCount == 1)
 	{
-		NewGO<GameClear>(0);
-		DeleteGO(this);
-	}
-	//ÊñáÂ≠óÂàó
-	wchar_t numStr[256];
-	//„Ç≠„Éº„ÅÆÊï∞
-	int num = 1;
-	num = player->keyCount;
-
-	//Êï∞ÂÄ§„Åã„ÇâÊñáÂ≠óÂàó„ÅÆÂ§âÊèõ
-	swprintf_s(numStr, L"%d/5", num);
-
-	fontRender.SetText(numStr);
 	
-	m_modelRender.Update();
+		position.x = -900.0f;
+		position.y = -350.0f;
+		spriteRender.SetPosition(position);
+		
+		spriteRender.Update();
+		
+			if (m_player->ene == 1)
+			{
+				enemy = NewGO<Enemy>(0, "enemy");
+				enemy->m_position = { -6773.0f,-557.6f,-2630.8f };
+				m_player->ene++;
+				DeleteGO(gameBGM);
+				g_soundEngine->ResistWaveFileBank(1, "Assets/sound/Game2.wav");
+				gameBGM = NewGO<SoundSource>(1);
+				gameBGM->Init(1);
+				gameBGM->Play(true);
+			}
+	
+			if (m_player->ene == 4)
+			{
+				enemy = NewGO<Enemy>(0, "enemy");
+				enemy->m_position = { -8108.0,100.0f,10899.0f };
+				m_player->ene++;
+				DeleteGO(gameBGM);
+				
+				gameBGM = NewGO<SoundSource>(1);
+				gameBGM->Init(1);
+				gameBGM->Play(true);
+			}
+		
+		//enemy->firstPosition = enemy->m_position;
+	}
+
+	modelRender.Update();
 }
 
 void Game::Render(RenderContext& rc)
 {
+	if (m_player->keyCount == 1)
+	{
+		spriteRender.Draw(rc);
+	}
+	m_levelRender.Draw(rc);
 	fontRender.Draw(rc);
 }

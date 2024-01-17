@@ -6,7 +6,7 @@
 
 Title::Title()
 {
-	spriteRender.Init("Assets/sprite/GameTitle2.dds",1920.0f,1080.0f);
+	spriteRender.Init("Assets/sprite/GameTitle2_1.dds",1920.0f,1080.0f);
 	
 	g_soundEngine->ResistWaveFileBank(2, "Assets/sound/Title.wav");
 	titleBGM = NewGO<SoundSource>(2);

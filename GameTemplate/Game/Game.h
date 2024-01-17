@@ -5,14 +5,18 @@
 
 class Player;
 class GameCamera;
-class BackGround;
 class Enemy;
+class Mod1;
+class BackGround;
+class Mark;
+class Stage1;
 class Key;
+
 
 class Game : public IGameObject
 {
 public:
-	Game() {}
+	Game();
 	//ä÷êîêÈåæ
 	~Game();
 	bool Start();
@@ -20,19 +24,19 @@ public:
 	void Render(RenderContext& rc);
 	GameCamera* gameCamera;
 	BackGround* backGround;
-	Player* player;
+	Stage1* stage1;
+	Mark* mark;
+	Player* m_player;
+	Mod1* mod1;
 	Enemy* enemy;
 	FontRender fontRender;
 	Vector3 position;
-	int keyCount;
 	SoundSource* gameBGM;
-private:
-	ModelRender m_modelRender;
+	ModelRender modelRender;
 	Vector3 m_pos;
-	Key* key1;
-	Key* key2;
-	Key* key3;
-	Key* key4;
-	Key* key5;
+	LevelRender m_levelRender;
+	SpriteRender spriteRender;
+	//int ene = 0;
+
 };
 

@@ -1,75 +1,44 @@
 #include "stdafx.h"
-#include "key.h"
+#include "Key.h"
 #include "Player.h"
-#include "sound/SoundEngine.h"
-#include "sound/SoundSource.h"
+#include "Game.h"
 
 Key::Key()
 {
+
 	modelRender.Init("Assets/modelData/key.tkm");
-	g_soundEngine->ResistWaveFileBank(1, "Assets/sound/sample.wav");
-	modelRender.SetScale(Vector3(2.0f, 2.0f, 2.0f));
-	player = FindGO<Player>("player");
+
+	m_player = FindGO<Player>("player");
+	//game = FindGO<Game>("game");
 }
 
 Key::~Key()
 {
-
+	DeleteGO(gameSE);
 }
 
 void Key::Update()
 {
-
-	Move();
-
-	Rotation();
-
-
-	modelRender.Update();
-	Vector3 diff = player->position - position;
-	if (diff.Length() <= 120.0f)
+	if (m_player == nullptr) {
+		return;
+	}
+	modelRender.SetPosition(m_position);
+	Vector3 dif = m_player->position - m_position;
+	if (dif.Length() <= 120.0f && g_pad[0]->IsTrigger(enButtonA))
 	{
-		SoundSource* se = NewGO<SoundSource>(0);
-		se->Init(1);
-		se->Play(false);
-		se->SetVolume(3.5f);
-
-		player->keyCount += 1;
+		m_player->a++;
+		m_player->keyCount += 1;
+		m_player->ene++;
+		g_soundEngine->ResistWaveFileBank(10, "Assets/sound/Key pick.wav");
+		gameSE = NewGO<SoundSource>(10);
+		gameSE->Init(10);
+		gameSE->Play(false);
 		DeleteGO(this);
 	}
-
-}
-
-void Key::Move()
-{
-	if (position.y >= firstPosition.y + 50.0f)
-	{
-		moveState = 1;
-	}
-	else if (position.y <= firstPosition.y - 50.0f)
-	{
-		moveState = 0;
-	}
-	if (moveState == 0)
-	{
-		position.y += 0.5f;
-	}
-	else if (moveState == 1)
-	{
-		position.y -= 0.5f;
-	}
-	modelRender.SetPosition(position);
-}
-
-void Key::Rotation()
-{
-	rotation.AddRotationDegY(2.0f);
-
-	modelRender.SetRotation(rotation);
+	modelRender.Update();
 }
 
 void Key::Render(RenderContext& rc)
 {
-	
 	modelRender.Draw(rc);
 }

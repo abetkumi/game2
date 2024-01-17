@@ -1,20 +1,26 @@
 #pragma once
 
+#include "sound/SoundSource.h"
+
 class Player;
+class BackGround;
+class Game;
+
 class Key : public IGameObject
 {
 public:
 	Key();
 	~Key();
+
 	void Update();
 	void Render(RenderContext& rc);
-	void Move();
-	void Rotation();
-	Player* player;
-	Quaternion rotation;
+
+	Player* m_player;
+	Game* game;
+	SoundSource* gameSE;
+	BackGround* backGround;
 	ModelRender modelRender;
-	Vector3 position;
-	Vector3 firstPosition;
-	int moveState = 0;
+	Vector3 m_position;
+	
 };
 

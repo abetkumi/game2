@@ -7,7 +7,7 @@
 GameOver::GameOver()
 {
 	g_soundEngine->ResistWaveFileBank(3, "Assets/sound/GameOver.wav");
-	spriteRender.Init("Assets/sprite/GameOver2.dds", 1920.0f, 1080.0f);
+	spriteRender.Init("Assets/sprite/GameOver3.dds", 1920.0f, 1080.0f);
 	gameoverBGM = NewGO<SoundSource>(3);
 	gameoverBGM->Init(3);
 	gameoverBGM->Play(true);
